@@ -1,0 +1,80 @@
+{
+  "name": "encrypted-electron-store",
+  "description": "Encrypted storage for Electron applications",
+  "author": "rixcian <rostislav.kremecek@protonmail.com>",
+  "version": "0.1.0",
+  "license": "MIT",
+  "keywords": [
+    "electron",
+    "store",
+    "encryption",
+    "react"
+  ],
+  "type": "module",
+  "main": "./dist/main.cjs.js",
+  "module": "./dist/main.es.js",
+  "exports": {
+    "./main": {
+      "require": "./dist/main.cjs.js",
+      "import": "./dist/main.es.js",
+      "types": "./dist/main.d.ts"
+    },
+    "./preload": {
+      "require": "./dist/preload.cjs.js",
+      "import": "./dist/preload.es.js",
+      "types": "./dist/preload.d.ts"
+    },
+    "./react": {
+      "require": "./dist/react.cjs.js",
+      "import": "./dist/react.es.js",
+      "types": "./dist/react.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "build:watch": "vite build --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:staged": "lint-staged",
+    "format": "prettier --write \"**/*.{ts,json}\"",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,mts,cts}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "@types/react": "^19.1.0",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "@vitest/coverage-v8": "^1.3.1",
+    "electron": "^35.1.2",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "prettier": "^3.2.5",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "react": "^18.3.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.4",
+    "vite-plugin-dts": "^4.5.3",
+    "vitest": "^1.3.1"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  }
+}
