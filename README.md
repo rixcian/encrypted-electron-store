@@ -3,7 +3,7 @@
 ## todo
 
 - [x] Finish basic react implementation
-- [ ] Make `const time = useEncryptedStore((store, setStore) => store.time)` architecture possible (similar to `zustand`)
+- [x] Make `const time = useEncryptedStore((store, setStore) => store.time)` architecture possible (similar to `zustand`)
 
 ```typescript
 // Usage

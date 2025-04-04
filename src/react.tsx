@@ -5,7 +5,7 @@ import { EVENTS } from './types/events'
 // Define the context type
 interface EncryptedStoreContextType<T extends Record<string, unknown>> {
 	store: T
-	setStore: (store: T) => void
+	setStore: (store: Partial<T>) => void
 }
 
 // Create the context with a default value
@@ -45,7 +45,8 @@ export function EncryptedStoreProvider<T extends Record<string, unknown>>({
 			})
 
 		// Listen for updates from the main process
-		const updateStore = (_: unknown, store: T) => setStore(store)
+		const updateStore = (_: unknown, store: Partial<T>) =>
+			setStore((prev) => ({ ...prev, ...store }))
 		window.encryptedStore.on(
 			EVENTS.ENCRYPTED_STORE_UPDATED,
 			updateStore as (...args: unknown[]) => void
@@ -61,9 +62,9 @@ export function EncryptedStoreProvider<T extends Record<string, unknown>>({
 	}, [])
 
 	// Set the store in the main process
-	const _setStore = (store: T) => {
+	const _setStore = (store: Partial<T>) => {
 		window.encryptedStore.invoke(EVENTS.ENCRYPTED_STORE_SET, store)
-		setStore(store)
+		setStore((prev) => ({ ...prev, ...store }))
 	}
 
 	return (
