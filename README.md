@@ -3,6 +3,23 @@
 ## todo
 
 - [x] Finish basic react implementation
+- [ ] Make `const time = useEncryptedStore((store, setStore) => store.time)` architecture possible (similar to `zustand`)
+
+```typescript
+// Usage
+const { store, setStore } = useEncryptedStore<Store>()
+const time = useEncryptedStore<Store>((store) => store.time)
+const setStore = useEncryptedStore<Store>((_, setStore) => setStore)
+
+// Another possible usage
+const { store, setStore } = useEncryptedStore<Store>()
+const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
+	time: store.time,
+	setStore,
+}))
+```
+
+- [ ] Add possibility to pass only partial store object to `setStore({...partialObject})` func
 - [ ] Finish vanilla implementation
 - [ ] Create `examples` folder with electron projects
 - [ ] Add debug mode
@@ -10,8 +27,6 @@
 - [ ] Refactor tests (do them properly)
 - [ ] Thinks about passing somehow the store through preload.ts
 - [ ] Think about singleton implementation (this could help with the point above about passing store through preload)
-- [ ] Add possibility to pass only partial store object to `setStore({...partialObject})` func
-- [ ] Make `const time = useEncryptedStore((store, setStore) => store.time)` architecture possible (similar to `zustand`)
 
 ## encrypted-electron-store vs. electron-store
 

@@ -75,14 +75,29 @@ export function EncryptedStoreProvider<T extends Record<string, unknown>>({
 	)
 }
 
-// Create a custom hook to use the theme context
-export const useEncryptedStore: <
+// Helper type for the selector function
+export type EncryptedStoreSelector<T extends Record<string, unknown>, R> = (
+	store: T,
+	setStore: (store: T) => void
+) => R
+
+// Create a custom hook to use the encrypted store
+export function useEncryptedStore<
 	T extends Record<string, unknown>,
->() => EncryptedStoreContextType<T> = <T extends Record<string, unknown>>() => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	R = EncryptedStoreContextType<T> | any,
+>(selector?: EncryptedStoreSelector<T, R>): R {
 	const context = useContext(EncryptedStoreContext)
+
 	if (context === undefined) {
 		throw new Error('useEncryptedStore must be used within a EncryptedStoreProvider')
 	}
 
-	return context as EncryptedStoreContextType<T>
+	// If a selector is provided, use it to extract the value
+	if (selector) {
+		return selector(context.store as T, context.setStore as (store: T) => void)
+	}
+
+	// Otherwise, return the full context
+	return context as unknown as R
 }
