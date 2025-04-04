@@ -2,7 +2,7 @@ import { BrowserWindow } from 'electron'
 import fs from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 
-import { EncryptedStore } from '../src/main'
+import EncryptedStore from '../src/main'
 
 // Mock electron modules
 vi.mock('electron', () => ({
@@ -72,13 +72,6 @@ describe('encrypted-electron-store/main', () => {
 		store.set('test', '🚀')
 		store.clear()
 		expect(store.get('test')).toBeUndefined()
-	})
-
-	it('should be able to delete the store', () => {
-		const store = new EncryptedStore({ storeName: 'test', fileExtension: 'json' })
-		store.set('test', '🚀')
-		store.deleteStore()
-		expect(fs.existsSync(`${process.cwd()}/test.json`)).toBe(false)
 	})
 
 	it('should warn when encryption is not available', () => {
@@ -185,5 +178,12 @@ describe('encrypted-electron-store/main', () => {
 			expect.any(String),
 			expect.objectContaining({ test: '🚀' })
 		)
+	})
+
+	it('should be able to delete the store', () => {
+		const store = new EncryptedStore({ storeName: 'test', fileExtension: 'json' })
+		store.set('test', '🚀')
+		store.deleteStore()
+		expect(fs.existsSync(`${process.cwd()}/test.json`)).toBe(false)
 	})
 })

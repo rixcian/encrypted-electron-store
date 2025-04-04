@@ -28,6 +28,11 @@
       "require": "./dist/react.cjs.js",
       "import": "./dist/react.es.js",
       "types": "./dist/react.d.ts"
+    },
+    "./vanilla": {
+      "require": "./dist/vanilla.cjs.js",
+      "import": "./dist/vanilla.es.js",
+      "types": "./dist/vanilla.d.ts"
     }
   },
   "scripts": {

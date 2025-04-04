@@ -21,12 +21,23 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
 
 - [x] Add possibility to pass only partial store object to `setStore({...partialObject})` func
 - [x] Prepare tests for react part
-- [ ] Finish vanilla js implementation
-- [ ] Think about singleton implementation (this could help with the point about passing store through preload)
+- [x] Finish vanilla js implementation
+- [ ] Add possibility to define default/initial store value on store creation
+  - [ ] In the `main.ts` (in the main process)
+  - [ ] In the `EncryptedStoreProvider` React context (`react.ts` - in the renderer process)
+    - It will be only applied when there's no store already set from the file
+  - [ ] In the `EncryptedStore` class (`vanilla.ts` - in the renderer process)
+    - It will be only applied when there's no store already set from the file
 - [ ] Work with the store file atomically
 - [ ] Create `examples` folder with electron projects
+- [ ] Think about singleton implementation (this could help with the point about passing store through preload)
+  - [ ] `EncryptedStore` class in the `main` lib
+  - [x] `vanilla` (EncryptedStore class) and `react` (EncryptedStoreProvider) - renderers libraries; are designed as singletons
+- [ ] Try to remove the `ReactJsxRuntime` from the final `react.es.js` and `react.cjs.js` builds
+- [ ] Do not forget to minify the library when debugging will be over
+- [x] Thinks about passing somehow the store through preload.ts (only possible with EncryptedStore class as singleton???)
+  - On every change of the state call `contextBridge.exposeInMainWorld('encryptedStore', this.store)`, or just call this once when you're creating the singleton object (update: this can't be done, contextBridge can be called only in preload.ts)
 - [ ] Add debug mode
-- [ ] Thinks about passing somehow the store through preload.ts
 
 ## encrypted-electron-store vs. electron-store
 

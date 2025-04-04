@@ -5,7 +5,7 @@ import path from 'node:path'
 
 import { EVENTS } from './types/events'
 
-export interface Options {
+interface Options {
 	/**
 	 * The name of the file to store the data..
 	 * @default 'store'
@@ -51,7 +51,7 @@ export interface Options {
  * const store = useEncryptedStore()
  * ```
  */
-export class EncryptedStore<T extends Record<string, unknown>> {
+class EncryptedStore<T extends Record<string, unknown>> {
 	private store: T
 	private browserWindow: BrowserWindow | undefined
 	readonly path: string
@@ -195,3 +195,5 @@ export class EncryptedStore<T extends Record<string, unknown>> {
 		fs.unlinkSync(this.path)
 	}
 }
+
+export default EncryptedStore

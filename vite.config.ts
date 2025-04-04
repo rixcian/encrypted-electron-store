@@ -16,8 +16,9 @@ export default defineConfig({
 			entry: {
 				main: resolve(dirname(fileURLToPath(import.meta.url)), 'src/main.ts'),
 				preload: resolve(dirname(fileURLToPath(import.meta.url)), 'src/preload.ts'),
-				react: resolve(dirname(fileURLToPath(import.meta.url)), 'src/react.tsx'),
 				events: resolve(dirname(fileURLToPath(import.meta.url)), 'src/types/events.ts'),
+				react: resolve(dirname(fileURLToPath(import.meta.url)), 'src/react.tsx'),
+				vanilla: resolve(dirname(fileURLToPath(import.meta.url)), 'src/vanilla.ts'),
 			},
 			fileName: (format, entryName) => `${entryName}.${format}.js`,
 			formats: ['es', 'cjs'],
@@ -42,10 +43,18 @@ export default defineConfig({
 	test: {
 		globals: true,
 		environment: 'node',
-		include: ['test/**/*.test.ts'], // Include only .ts test files for now (ignore renderer tests)
+		include: ['test/main.test.ts', 'test/preload.test.ts'],
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'json', 'html'],
+		},
+		environmentOptions: {
+			jsdom: {
+				include: ['test/vanilla.test.ts', 'test/react.test.ts'],
+			},
+			node: {
+				include: ['test/main.test.ts', 'test/preload.test.ts'],
+			},
 		},
 	},
 } as UserConfigExport)
