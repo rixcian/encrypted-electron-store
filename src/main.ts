@@ -153,10 +153,6 @@ export class EncryptedStore<T extends Record<string, unknown>> {
 		// Send the updated store to the renderer process.
 		if (this.browserWindow) {
 			this.browserWindow.webContents.send(EVENTS.ENCRYPTED_STORE_UPDATED, this.store)
-		} else {
-			console.warn(
-				'[encrypted-electron-store] Browser window is not set. Store will not be updated in the renderer process.'
-			)
 		}
 	}
 

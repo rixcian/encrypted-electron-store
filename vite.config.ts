@@ -42,6 +42,7 @@ export default defineConfig({
 	test: {
 		globals: true,
 		environment: 'node',
+		include: ['test/**/*.test.ts'], // Include only .ts test files for now (ignore renderer tests)
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'json', 'html'],

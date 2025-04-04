@@ -77,7 +77,7 @@ export function EncryptedStoreProvider<T extends Record<string, unknown>>({
 }
 
 // Helper type for the selector function
-export type EncryptedStoreSelector<T extends Record<string, unknown>, R> = (
+type EncryptedStoreSelector<T extends Record<string, unknown>, R> = (
 	store: T,
 	setStore: (store: T) => void
 ) => R

@@ -1,3 +1,4 @@
+import { BrowserWindow } from 'electron'
 import fs from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -12,11 +13,14 @@ vi.mock('electron', () => ({
 		handle: vi.fn(),
 	},
 	safeStorage: {
-		isEncryptionAvailable: () => true,
+		isEncryptionAvailable: vi.fn(() => true),
 		encryptString: (text: string) => Buffer.from(text),
 		decryptString: (buffer: Buffer) => buffer.toString(),
 	},
 }))
+
+// Import the mocked electron modules
+import { ipcMain, safeStorage } from 'electron'
 
 describe('encrypted-electron-store/main', () => {
 	it('should be instantiable', () => {
@@ -75,5 +79,111 @@ describe('encrypted-electron-store/main', () => {
 		store.set('test', '🚀')
 		store.deleteStore()
 		expect(fs.existsSync(`${process.cwd()}/test.json`)).toBe(false)
+	})
+
+	it('should warn when encryption is not available', () => {
+		// Mock console.warn
+		const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+		// Mock isEncryptionAvailable to return false
+		vi.mocked(safeStorage.isEncryptionAvailable).mockReturnValueOnce(false)
+
+		// Create a new store instance
+		new EncryptedStore({ storeName: 'test', fileExtension: 'json' })
+
+		// Verify warning was logged
+		expect(consoleWarnSpy).toHaveBeenCalledWith(
+			'[encrypted-electron-store] Encryption is not available. Data will be encrypted via hardcoded plaintext password.'
+		)
+
+		// Restore console.warn
+		consoleWarnSpy.mockRestore()
+	})
+
+	it('should handle errors when reading the store file', () => {
+		// Mock fs.existsSync to return true
+		vi.spyOn(fs, 'existsSync').mockReturnValueOnce(true)
+
+		// Mock fs.readFileSync to throw an error
+		vi.spyOn(fs, 'readFileSync').mockImplementationOnce(() => {
+			throw new Error('Test error')
+		})
+
+		// Mock console.error
+		const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+		// Create a new store instance
+		const store = new EncryptedStore({ storeName: 'test', fileExtension: 'json' })
+
+		// Verify error was logged
+		expect(consoleErrorSpy).toHaveBeenCalled()
+
+		// Verify store is initialized as empty object
+		expect(store.getStore()).toEqual({})
+
+		// Restore mocks
+		consoleErrorSpy.mockRestore()
+		vi.restoreAllMocks()
+	})
+
+	it('should set up IPC events', () => {
+		// Create a new store instance
+		const store = new EncryptedStore({ storeName: 'test', fileExtension: 'json' })
+
+		// Verify ipcMain.handle was called for ENCRYPTED_STORE_GET
+		expect(ipcMain.handle).toHaveBeenCalledWith(expect.any(String), expect.any(Function))
+
+		// Verify ipcMain.handle was called for ENCRYPTED_STORE_SET
+		expect(ipcMain.handle).toHaveBeenCalledWith(expect.any(String), expect.any(Function))
+	})
+
+	it('should set browser window', () => {
+		// Create a new store instance
+		const store = new EncryptedStore({ storeName: 'test', fileExtension: 'json' })
+
+		// Create a mock browser window
+		const mockBrowserWindow = {
+			webContents: {
+				send: vi.fn(),
+			},
+		} as unknown as BrowserWindow
+
+		// Set the browser window
+		store.setBrowserWindow(mockBrowserWindow)
+
+		// Verify the browser window was set
+		// Note: We can't directly access the private property, but we can test the behavior
+		// by setting a value and checking if the webContents.send was called
+		store.set('test', '🚀')
+
+		// Verify webContents.send was called
+		expect(mockBrowserWindow.webContents.send).toHaveBeenCalledWith(
+			expect.any(String),
+			expect.objectContaining({ test: '🚀' })
+		)
+	})
+
+	it('should send updates to the browser window when setting values', () => {
+		// Create a new store instance
+		const store = new EncryptedStore({ storeName: 'test', fileExtension: 'json' })
+
+		// Create a mock browser window
+		const mockBrowserWindow = {
+			webContents: {
+				send: vi.fn(),
+			},
+		} as unknown as BrowserWindow
+
+		// Set the browser window
+		store.setBrowserWindow(mockBrowserWindow)
+
+		// Set a value
+		store.set('test', '🚀')
+
+		// Verify webContents.send was called
+		expect(mockBrowserWindow.webContents.send).toHaveBeenCalledWith(
+			expect.any(String),
+			expect.objectContaining({ test: '🚀' })
+		)
 	})
 })

@@ -19,14 +19,14 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
 }))
 ```
 
-- [ ] Add possibility to pass only partial store object to `setStore({...partialObject})` func
-- [ ] Finish vanilla implementation
+- [x] Add possibility to pass only partial store object to `setStore({...partialObject})` func
+- [x] Prepare tests for react part
+- [ ] Finish vanilla js implementation
+- [ ] Think about singleton implementation (this could help with the point about passing store through preload)
+- [ ] Work with the store file atomically
 - [ ] Create `examples` folder with electron projects
 - [ ] Add debug mode
-- [ ] Work with the store file atomically
-- [ ] Refactor tests (do them properly)
 - [ ] Thinks about passing somehow the store through preload.ts
-- [ ] Think about singleton implementation (this could help with the point above about passing store through preload)
 
 ## encrypted-electron-store vs. electron-store
 

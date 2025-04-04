@@ -10,6 +10,7 @@ export default [
 			'dist/**',
 			'node_modules/**',
 			'**/*.test.ts',
+			'**/*.test.tsx',
 			'**/*.spec.ts',
 			'**/*.mjs',
 			'**/*.cjs',
