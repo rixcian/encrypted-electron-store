@@ -1,6 +1,128 @@
-# encrypted-electron-store
+<div align="center">
+	<a href="https://rixcian.dev/projects/encrypted-electron-store">
+		<img src="docs/icon.png" width="200" height="200" style="border-radius: 32px">
+	</a>
+	<h1>encrypted-electron-store</h1>
+	<br>
+</div>
 
-## todo
+Simple encrypted data persistence for your Electron app - Save and load user settings, app state, cache, etc.
+
+It has the same API as the well-known `electron-store` library, but solves several other things:
+
+- Encrypts the data saved on disk (with built-in Electron's `safeStorage` API)
+- Support for React hooks (auto re-renders view on store update)
+- Also works in `renderer` process (not like `electron-store` - [issue link](https://github.com/sindresorhus/electron-store/issues/268))
+- Has CommonJS exports (`electron-store` has only ESM exports)
+- Uses same API as `zustand` for getting values from store (via `useEncryptedStore` React hook)
+  - e.g. `const encrypted = useEncryptedStore(store => store.encrypted)`
+
+## Install
+
+```sh
+npm i encrypted-electron-store
+```
+
+## Usage
+
+### Main process (`main.ts/js`)
+
+```typescript
+import EncryptedStore from 'encrypted-electron-store'
+
+const store = new EncryptedStore()
+// or: const store = new EncryptedStore<{ encrypted: string }>()
+
+store.set('encrypted', '🔒')
+console.log(store.get('encrypted'))
+//=> '🔒'
+
+store.delete('encrypted')
+console.log(store.get('encrypted'))
+//=> undefined
+```
+
+### Renderer process
+
+If you want to also use this library in `render` process, you firstly have to call this in `preload.ts/js`
+
+```typescript
+// preload.ts/js
+import { preloadEncryptedStore } from 'encrypted-electron-store/preload'
+
+preloadEncryptedStore()
+
+// ... rest of the file
+```
+
+#### React
+
+Add `EncryptedStoreProvider` component in `main.tsx/jsx` or where do you want in your React project.
+
+```typescript
+// main.tsx/jsx
+import { EncryptedStoreProvider } from 'encrypted-electron-store/react'
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <EncryptedStoreProvider>
+      <App />
+    </EncryptedStoreProvider>
+  </React.StrictMode>
+);
+```
+
+Use `useEncryptedStore()` hook wherever you want in your React project.
+
+```typescript
+// e.g. App.tsx/jsx
+import { useEncryptedStore } from 'encrypted-electron-store/react'
+
+function App() {
+  const { store, setStore } = useEncryptedStore<{ encrypted: string }>()
+  const encrypted = useEncryptedStore<{ encrypted: string }>((store) => store.encrypted);
+
+  setStore({ encrypted: '🔒' });
+
+  return (
+    /* Gets automatically re-rendered when the value gets changed */
+    <p>{encrypted}</p>
+  )
+}
+```
+
+#### Vanilla JS
+
+```typescript
+import EncryptedStore from 'encrypted-electron-store/vanilla'
+
+// You have to use `await` because the library is reading initial store from file on disk.
+const store = await EncryptedStore.create<{ encrypted: string }>()
+
+store.set('encrypted', '🔒')
+console.log(store.get('encrypted'))
+// => '🔒'
+```
+
+## Docs
+
+_todo: Here will be specified detailed documentation; or just link to the official docs_
+
+## Comparison: `encrypted-electron-store` vs. `electron-store`
+
+| Feature                            | encrypted-electron-store               | electron-store                                                                                                                 |
+| ---------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Works in main & renderer processes | ✅ Yes                                 | 🟡 Only in main process                                                                                                        |
+| ESM & CommonJS exports             | ✅ ESM & CJS Supported                 | ❌ Only ESM exports supported                                                                                                  |
+| Encryption                         | ✅ Uses Electron's built-in encryption | 🟡 Not sufficient (encryption password in plaintext)                                                                           |
+| React Integration                  | ✅ Built-in React hooks                | ❌ No React integration                                                                                                        |
+| Vanilla JS Integration             | ✅ Simple API                          | ✅ Simple API                                                                                                                  |
+| File Extensions                    | ✅ Configurable                        | ✅ Configurable                                                                                                                |
+| Works with files atomically        | ✅ Yes                                 | ✅ Yes                                                                                                                         |
+| JSON Schema validation             | 🟡 In future versions                  | ✅                                                                                                                             |
+| Migrations                         | ❌ Yes, if there'll be demand          | 🟡 Yes, with bugs ([more info](https://github.com/sindresorhus/electron-store/issues?q=is%3Aissue%20state%3Aopen%20migration)) |
+
+## Todos
 
 - [x] Finish basic react implementation
 - [x] Make `const time = useEncryptedStore((store, setStore) => store.time)` architecture possible (similar to `zustand`)
@@ -42,17 +164,7 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
 - [ ] Try to remove the `ReactJsxRuntime` from the final `react.es.js` and `react.cjs.js` builds
 - [ ] Do not forget to minify the library when debugging will be over
 - [ ] Add JSON schema validation via `ajv`
+- [ ] Try to remove the `await` from the vanillajs implementation (it shouldn't be necessary to read file when initializing the store from renderer; it should be already loaded in the `EncryptedStore` object in the `main.ts`)
 - [x] Thinks about passing somehow the store through preload.ts (only possible with EncryptedStore class as singleton???)
   - On every change of the state call `contextBridge.exposeInMainWorld('encryptedStore', this.store)`, or just call this once when you're creating the singleton object (update: this can't be done, contextBridge can be called only in preload.ts)
 - [ ] Add debug mode
-
-## encrypted-electron-store vs. electron-store
-
-| Feature                | encrypted-electron-store               | electron-store                      |
-| ---------------------- | -------------------------------------- | ----------------------------------- |
-| ESM & CommonJS exports | ✅ ESM & CJS Supported                 | ❌ Only ESM exports supported       |
-| Encryption             | ✅ Uses Electron's built-in encryption | 🟡 Encryption password in plaintext |
-| React Integration      | ✅ Built-in React hooks                | ❌ No React integration             |
-| Vanilla JS Integration | ✅ Simple API                          | ✅ Simple API                       |
-| File Extensions        | ✅ Configurable                        | ✅ Configurable                     |
-| Bundle Size            | 🟡 Medium (~5KB)                       | 🟡 Medium (~6KB)                    |
