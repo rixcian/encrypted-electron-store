@@ -8,6 +8,8 @@
 
 Simple encrypted data persistence for your Electron app - Save and load user settings, app state, cache, etc.
 
+<br />
+
 It has the same API as the well-known `electron-store` library, but solves several other things:
 
 - Encrypts the data saved on disk (with built-in Electron's `safeStorage` API)
@@ -16,6 +18,8 @@ It has the same API as the well-known `electron-store` library, but solves sever
 - Has CommonJS exports (`electron-store` has only ESM exports)
 - Uses same API as `zustand` for getting values from store (via `useEncryptedStore` React hook)
   - e.g. `const encrypted = useEncryptedStore(store => store.encrypted)`
+
+<br />
 
 ## Install
 
