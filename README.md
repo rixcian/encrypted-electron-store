@@ -34,7 +34,7 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
   - [x] update `get` func (add `defaultValue` optional parameter)
   - [x] add `has` func
   - [x] add `.size` prop
-- [ ] Work with the store file atomically
+- [x] Work with the store file atomically
 - [ ] Create `examples` folder with electron projects
 - [ ] Think about singleton implementation (this could help with the point about passing store through preload)
   - [ ] `EncryptedStore` class in the `main` lib
