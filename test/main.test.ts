@@ -146,6 +146,23 @@ describe('encrypted-electron-store/main', () => {
 		expect(store.get('test')).toBeUndefined()
 	})
 
+	it('should be able to check if a key exists', () => {
+		// Create a new store instance
+		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+
+		// Set a value
+		store.set('test', '🚀')
+
+		// Verify the key exists
+		expect(store.has('test')).toBe(true)
+
+		// Delete the value
+		store.delete('test')
+
+		// Verify the key doesn't exist
+		expect(store.has('test')).toBe(false)
+	})
+
 	it('should be able to get the store as an object', () => {
 		// Create a new store instance
 		const store = new EncryptedStore({ storeName: getUniqueStoreName() })

@@ -31,7 +31,7 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
 - [ ] Compatibility with `electron-store`
   - [x] add `reset` func
   - [x] overload `set` func (set multiple items at once)
-  - [ ] update `get` func (add `defaultValue` optional parameter)
+  - [x] update `get` func (add `defaultValue` optional parameter)
   - [ ] add `has` func
   - [ ] add `.size` prop
 - [ ] Work with the store file atomically

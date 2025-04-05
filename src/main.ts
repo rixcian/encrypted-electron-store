@@ -155,12 +155,14 @@ class EncryptedStore<T extends Record<string, unknown>> {
 	 * Get a value from the store.
 	 *
 	 * @param key - The key of the value to get.
+	 * @param defaultValue - The default value to set if the key doesn't have a value.
 	 * @returns The value of the key.
 	 *
 	 * @example
 	 * ```ts
 	 * const store = new EncryptedStore()
 	 * const name = store.get('name')
+	 * const age = store.get('age', 20)
 	 * ```
 	 */
 	public get<K extends keyof T>(key: K, defaultValue?: unknown): T[K] {
@@ -225,6 +227,14 @@ class EncryptedStore<T extends Record<string, unknown>> {
 
 	/**
 	 * Delete a key value pair from the store.
+	 *
+	 * @param key - The key of the value to delete.
+	 *
+	 * @example
+	 * ```ts
+	 * const store = new EncryptedStore()
+	 * store.delete('name')
+	 * ```
 	 */
 	public delete<K extends keyof T>(key: K): void {
 		// Delete the key value pair from the object and save the store to disk.
@@ -236,7 +246,23 @@ class EncryptedStore<T extends Record<string, unknown>> {
 	}
 
 	/**
+	 * Check if a key exists in the store.
+	 *
+	 * @param key - The key to check.
+	 * @returns `true` if the key exists, `false` otherwise.
+	 */
+	public has(key: keyof T): boolean {
+		return this.store[key] !== undefined
+	}
+
+	/**
 	 * Clear the store.
+	 *
+	 * @example
+	 * ```ts
+	 * const store = new EncryptedStore()
+	 * store.clear()
+	 * ```
 	 */
 	public clear(): void {
 		// Clear the store object and save it to disk.
@@ -249,6 +275,12 @@ class EncryptedStore<T extends Record<string, unknown>> {
 
 	/**
 	 * Reset the store to the defaults.
+	 *
+	 * @example
+	 * ```ts
+	 * const store = new EncryptedStore()
+	 * store.reset()
+	 * ```
 	 */
 	public reset(): void {
 		// Create a deep copy of the defaults object
@@ -261,6 +293,12 @@ class EncryptedStore<T extends Record<string, unknown>> {
 
 	/**
 	 * Get the store as an object.
+	 *
+	 * @example
+	 * ```ts
+	 * const store = new EncryptedStore()
+	 * const storeObject = store.getStore()
+	 * ```
 	 */
 	public getStore(): T {
 		return this.store
@@ -268,6 +306,12 @@ class EncryptedStore<T extends Record<string, unknown>> {
 
 	/**
 	 * Delete the store file from disk.
+	 *
+	 * @example
+	 * ```ts
+	 * const store = new EncryptedStore()
+	 * store.deleteStore()
+	 * ```
 	 */
 	public deleteStore(): void {
 		this.store = {} as T
