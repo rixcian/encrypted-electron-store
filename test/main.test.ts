@@ -101,7 +101,7 @@ describe('encrypted-electron-store/main', () => {
 		expect(fs.existsSync(storePath)).toBe(true)
 	})
 
-	it('should be able to set a single value', () => {
+	it('should be able to set and get a single value', () => {
 		// Create a new store instance
 		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
 
@@ -110,6 +110,14 @@ describe('encrypted-electron-store/main', () => {
 
 		// Verify the value is set
 		expect(store.get('test')).toBe('🚀')
+	})
+
+	it('should be able to get a single value with a defaultValue set', () => {
+		// Create a new store instance
+		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+
+		// Get a value with a defaultValue set
+		expect(store.get('test', 'defaultValue')).toBe('defaultValue')
 	})
 
 	it('should be able to set multiple values', () => {

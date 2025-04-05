@@ -163,8 +163,18 @@ class EncryptedStore<T extends Record<string, unknown>> {
 	 * const name = store.get('name')
 	 * ```
 	 */
-	public get<K extends keyof T>(key: K): T[K] {
-		return this.store[key]
+	public get<K extends keyof T>(key: K, defaultValue?: unknown): T[K] {
+		if (!defaultValue) {
+			return this.store[key]
+		} else {
+			// If the key doesn't have value (is undefined), set the defaultValue
+			if (this.store[key] === undefined) {
+				this.store[key] = defaultValue as T[K]
+				this.saveStore()
+			}
+
+			return this.store[key]
+		}
 	}
 
 	/**
