@@ -35,6 +35,7 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
   - [x] `vanilla` (EncryptedStore class) and `react` (EncryptedStoreProvider) - renderers libraries; are designed as singletons
 - [ ] Try to remove the `ReactJsxRuntime` from the final `react.es.js` and `react.cjs.js` builds
 - [ ] Do not forget to minify the library when debugging will be over
+- [ ] Add JSON schema validation via `ajv`
 - [x] Thinks about passing somehow the store through preload.ts (only possible with EncryptedStore class as singleton???)
   - On every change of the state call `contextBridge.exposeInMainWorld('encryptedStore', this.store)`, or just call this once when you're creating the singleton object (update: this can't be done, contextBridge can be called only in preload.ts)
 - [ ] Add debug mode

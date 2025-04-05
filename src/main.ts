@@ -5,7 +5,7 @@ import path from 'node:path'
 
 import { EVENTS } from './types/events'
 
-interface Options {
+interface Options<T extends Record<string, unknown>> {
 	/**
 	 * The name of the file to store the data..
 	 * @default 'store'
@@ -25,6 +25,14 @@ interface Options {
 	 * @default undefined
 	 */
 	browserWindow?: BrowserWindow
+
+	/**
+	 * The default value of the store.
+	 *
+	 * This will be used if the store file does not exist.
+	 * @default {}
+	 */
+	defaults?: T
 }
 
 /**
@@ -55,16 +63,20 @@ class EncryptedStore<T extends Record<string, unknown>> {
 	private store: T
 	private browserWindow: BrowserWindow | undefined
 	readonly path: string
+	readonly defaults: T
 
-	constructor(initialOptions: Readonly<Partial<Options>> = {}) {
-		const defaultOptions: Options = {
+	constructor(initialOptions: Readonly<Partial<Options<T>>> = {}) {
+		const defaultOptions: Options<T> = {
 			storeName: 'store',
 			fileExtension: 'json',
 			browserWindow: undefined,
+			defaults: {} as T,
 			...initialOptions,
 		}
 
 		this.store = {} as T
+		// Create a deep copy of the defaults
+		this.defaults = JSON.parse(JSON.stringify(defaultOptions.defaults || {}))
 		this.browserWindow = defaultOptions.browserWindow
 		this.path = path.join(
 			app.getPath('userData'),
@@ -92,18 +104,22 @@ class EncryptedStore<T extends Record<string, unknown>> {
 		// If the store file already exists, decrypt it and parse it.
 		if (fs.existsSync(this.path)) {
 			try {
-				const encryptedStore = Buffer.from(fs.readFileSync(this.path, 'base64'), 'base64')
+				const encryptedStore = Buffer.from(fs.readFileSync(this.path, 'utf-8'), 'base64')
 				const decryptedStore = safeStorage.decryptString(encryptedStore)
 
 				this.store = JSON.parse(decryptedStore)
+				this.saveStore()
 			} catch (error) {
 				console.error(error)
 
-				this.store = {} as T
+				// Set store to the deep copy of the defaults
+				this.store = JSON.parse(JSON.stringify(this.defaults || {}))
+				this.saveStore()
 			}
 		} else {
-			// If the store file does not exist, create an empty store.
-			this.store = {} as T
+			// If the store file does not exist, use the deep copy of the defaults.
+			this.store = JSON.parse(JSON.stringify(this.defaults || {}))
+			this.saveStore()
 		}
 	}
 
@@ -132,7 +148,7 @@ class EncryptedStore<T extends Record<string, unknown>> {
 		const encryptedStore = safeStorage
 			.encryptString(JSON.stringify(this.store, null, 0))
 			.toString('base64')
-		fs.writeFileSync(this.path, encryptedStore, 'base64')
+		fs.writeFileSync(this.path, encryptedStore)
 	}
 
 	/**
@@ -174,6 +190,18 @@ class EncryptedStore<T extends Record<string, unknown>> {
 	public clear(): void {
 		// Clear the store object and save it to disk.
 		this.store = {} as T
+		this.saveStore()
+
+		// Send the updated store to the renderer process.
+		this.browserWindow?.webContents.send(EVENTS.ENCRYPTED_STORE_UPDATED, this.store)
+	}
+
+	/**
+	 * Reset the store to the defaults.
+	 */
+	public reset(): void {
+		// Create a deep copy of the defaults object
+		this.store = JSON.parse(JSON.stringify(this.defaults || {}))
 		this.saveStore()
 
 		// Send the updated store to the renderer process.
