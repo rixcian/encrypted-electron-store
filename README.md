@@ -3,6 +3,26 @@
 		<img src="docs/icon.png" width="200" height="200">
 	</a>
 	<h1>encrypted-electron-store</h1>
+  <p>
+		<a href="https://www.npmjs.com/package/encrypted-electron-store">
+			<img src="https://img.shields.io/npm/v/encrypted-electron-store.svg" alt="npm version">
+		</a>
+		<a href="https://www.npmjs.com/package/encrypted-electron-store">
+			<img src="https://img.shields.io/npm/dm/encrypted-electron-store.svg" alt="npm downloads">
+		</a>
+		<a href="https://codecov.io/gh/rixcian/encrypted-electron-store">
+			<img src="https://codecov.io/gh/rixcian/encrypted-electron-store/branch/main/graph/badge.svg" alt="Code Coverage">
+		</a>
+		<a href="https://github.com/rixcian/encrypted-electron-store/blob/main/LICENSE">
+			<img src="https://img.shields.io/npm/l/encrypted-electron-store.svg" alt="License">
+		</a>
+		<a href="https://github.com/rixcian/encrypted-electron-store/issues">
+			<img src="https://img.shields.io/github/issues/rixcian/encrypted-electron-store.svg" alt="Issues">
+		</a>
+		<a href="https://github.com/rixcian/encrypted-electron-store/pulls">
+			<img src="https://img.shields.io/github/issues-pr/rixcian/encrypted-electron-store.svg" alt="Pull Requests">
+		</a>
+	</p>
 	<br>
 </div>
 
@@ -161,6 +181,7 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
   - [x] add `has` func
   - [x] add `.size` prop
 - [x] Work with the store file atomically
+- [ ] Setup tags/badges in README
 - [ ] Create `examples` folder with electron projects
 - [ ] Think about singleton implementation (this could help with the point about passing store through preload)
   - [ ] `EncryptedStore` class in the `main` lib
