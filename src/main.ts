@@ -250,9 +250,34 @@ class EncryptedStore<T extends Record<string, unknown>> {
 	 *
 	 * @param key - The key to check.
 	 * @returns `true` if the key exists, `false` otherwise.
+	 *
+	 * @example
+	 * ```ts
+	 * const store = new EncryptedStore()
+	 * store.has('name') // false
+	 * store.set('name', 'John')
+	 * store.has('name') // true
+	 * ```
 	 */
 	public has(key: keyof T): boolean {
 		return this.store[key] !== undefined
+	}
+
+	/**
+	 * Get the size of the store.
+	 *
+	 * @returns The size of the store.
+	 *
+	 * @example
+	 * ```ts
+	 * const store = new EncryptedStore()
+	 * store.size() // 0
+	 * store.set('name', 'John')
+	 * store.size() // 1
+	 * ```
+	 */
+	public size(): number {
+		return Object.keys(this.store).length
 	}
 
 	/**

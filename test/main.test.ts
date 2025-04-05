@@ -163,6 +163,26 @@ describe('encrypted-electron-store/main', () => {
 		expect(store.has('test')).toBe(false)
 	})
 
+	it('should be able to get the size of the store', () => {
+		// Create a new store instance
+		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+
+		// Verify the size is 0
+		expect(store.size()).toBe(0)
+
+		// Set a value
+		store.set('test', '🚀')
+
+		// Verify the size is 1
+		expect(store.size()).toBe(1)
+
+		// Remove the value
+		store.delete('test')
+
+		// Verify the size is 0
+		expect(store.size()).toBe(0)
+	})
+
 	it('should be able to get the store as an object', () => {
 		// Create a new store instance
 		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
