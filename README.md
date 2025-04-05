@@ -1,6 +1,6 @@
 <div align="center">
 	<a href="https://rixcian.dev/projects/encrypted-electron-store">
-		<img src="docs/icon.png" width="200" height="200" style="border-radius: 32px">
+		<img src="docs/icon.png" width="200" height="200">
 	</a>
 	<h1>encrypted-electron-store</h1>
 	<br>
@@ -48,7 +48,7 @@ console.log(store.get('encrypted'))
 
 ### Renderer process
 
-If you want to also use this library in `render` process, you firstly have to call this in `preload.ts/js`
+If you want to use this library in `render` process as well, you firstly have to call this function in the `preload.ts/js` file.
 
 ```typescript
 // preload.ts/js
@@ -123,7 +123,7 @@ _todo: Here will be specified detailed documentation; or just link to the offici
 | Vanilla JS Integration             | ✅ Simple API                          | ✅ Simple API                                                                                                                  |
 | File Extensions                    | ✅ Configurable                        | ✅ Configurable                                                                                                                |
 | Works with files atomically        | ✅ Yes                                 | ✅ Yes                                                                                                                         |
-| JSON Schema validation             | 🟡 In future versions                  | ✅                                                                                                                             |
+| JSON Schema validation             | 🟡 In future versions                  | ✅ Yes                                                                                                                         |
 | Migrations                         | ❌ Yes, if there'll be demand          | 🟡 Yes, with bugs ([more info](https://github.com/sindresorhus/electron-store/issues?q=is%3Aissue%20state%3Aopen%20migration)) |
 
 ## Todos
