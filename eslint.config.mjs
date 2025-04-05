@@ -60,6 +60,7 @@ export default [
 			],
 			'no-console': ['warn', { allow: ['warn', 'error'] }],
 			'@typescript-eslint/no-non-null-assertion': 'warn',
+			'no-dupe-class-members': 'off',
 		},
 		settings: {
 			'import/resolver': {

@@ -101,7 +101,7 @@ describe('encrypted-electron-store/main', () => {
 		expect(fs.existsSync(storePath)).toBe(true)
 	})
 
-	it('should be able to set and get a value', () => {
+	it('should be able to set a single value', () => {
 		// Create a new store instance
 		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
 
@@ -110,6 +110,18 @@ describe('encrypted-electron-store/main', () => {
 
 		// Verify the value is set
 		expect(store.get('test')).toBe('🚀')
+	})
+
+	it('should be able to set multiple values', () => {
+		// Create a new store instance
+		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+
+		// Set multiple values
+		store.set({ test: '🚀', nested: { key: 'value' } })
+
+		// Verify the values are set
+		expect(store.get('test')).toBe('🚀')
+		expect(store.get('nested')).toEqual({ key: 'value' })
 	})
 
 	it('should be able to delete a value', () => {
@@ -338,7 +350,6 @@ describe('encrypted-electron-store/main', () => {
 
 		// Get the path to the store file
 		const storePath = path.join(process.cwd(), 'test', `${storeName}.json`)
-		console.log('storePath', storePath)
 
 		// Verify the store file was deleted
 		expect(fs.existsSync(storePath)).toBe(false)

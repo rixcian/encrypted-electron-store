@@ -29,7 +29,7 @@ interface Options<T extends Record<string, unknown>> {
 	/**
 	 * The default value of the store.
 	 *
-	 * This will be used if the store file does not exist.
+	 * Note: This will be used if the store file does not exist.
 	 * @default {}
 	 */
 	defaults?: T
@@ -153,6 +153,15 @@ class EncryptedStore<T extends Record<string, unknown>> {
 
 	/**
 	 * Get a value from the store.
+	 *
+	 * @param key - The key of the value to get.
+	 * @returns The value of the key.
+	 *
+	 * @example
+	 * ```ts
+	 * const store = new EncryptedStore()
+	 * const name = store.get('name')
+	 * ```
 	 */
 	public get<K extends keyof T>(key: K): T[K] {
 		return this.store[key]
@@ -160,10 +169,42 @@ class EncryptedStore<T extends Record<string, unknown>> {
 
 	/**
 	 * Set a value in the store.
+	 *
+	 * @param key - The key of the value to set.
+	 * @param value - The value to set.
+	 *
+	 * @example
+	 * ```ts
+	 * const store = new EncryptedStore()
+	 * store.set('name', 'John')
+	 * ```
 	 */
-	public set<K extends keyof T>(key: K, value: T[K]): void {
-		// Set the value in the object and save the store to disk.
-		this.store[key] = value
+	public set<K extends keyof T>(key: K, value: T[K]): void
+
+	/**
+	 * Set multiple values in the store.
+	 *
+	 * @param values - The values to set in the store.
+	 *
+	 * @example
+	 * ```ts
+	 * const store = new EncryptedStore()
+	 * store.set({ name: 'John', age: 20 })
+	 * ```
+	 */
+	public set(values: Partial<T>): void
+
+	public set<K extends keyof T>(keyOrValues: K | Partial<T>, value?: T[K]): void {
+		if (value !== undefined) {
+			// Single key-value pair case
+			const key = keyOrValues as K
+			this.store[key] = value
+		} else {
+			// Multiple values case
+			const values = keyOrValues as Partial<T>
+			Object.assign(this.store, values)
+		}
+
 		this.saveStore()
 
 		// Send the updated store to the renderer process.

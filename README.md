@@ -22,12 +22,18 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
 - [x] Add possibility to pass only partial store object to `setStore({...partialObject})` func
 - [x] Prepare tests for react part
 - [x] Finish vanilla js implementation
-- [ ] Add possibility to define default/initial store value on store creation
-  - [ ] In the `main.ts` (in the main process)
+- [x] Add possibility to define default/initial store value on store creation
+  - [x] In the `main.ts` (in the main process)
   - [ ] In the `EncryptedStoreProvider` React context (`react.ts` - in the renderer process)
     - It will be only applied when there's no store already set from the file
   - [ ] In the `EncryptedStore` class (`vanilla.ts` - in the renderer process)
     - It will be only applied when there's no store already set from the file
+- [ ] Compatibility with `electron-store`
+  - [x] add `reset` func
+  - [x] overload `set` func (set multiple items at once)
+  - [ ] update `get` func (add `defaultValue` optional parameter)
+  - [ ] add `has` func
+  - [ ] add `.size` prop
 - [ ] Work with the store file atomically
 - [ ] Create `examples` folder with electron projects
 - [ ] Think about singleton implementation (this could help with the point about passing store through preload)
