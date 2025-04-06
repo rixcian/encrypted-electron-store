@@ -158,7 +158,25 @@ npm i
 npm run test
 ```
 
-## Comparison with `electron-store`
+5. Create changelog:
+
+```sh
+npx @changesets/cli
+```
+
+6. Me as a maintainer after review, will run:
+
+```sh
+npx @changesets/cli version
+```
+
+7. And publish it to NPM with:
+
+```sh
+npx @changesets/cli publish
+```
+
+## Comparison to `electron-store`
 
 | Feature                            | encrypted-electron-store               | electron-store                                                                                                                 |
 | ---------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
