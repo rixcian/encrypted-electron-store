@@ -10,9 +10,9 @@
 		<a href="https://www.npmjs.com/package/encrypted-electron-store">
 			<img src="https://img.shields.io/npm/dm/encrypted-electron-store.svg" alt="npm downloads">
 		</a>
-		<a href="https://codecov.io/gh/rixcian/encrypted-electron-store">
-			<img src="https://codecov.io/gh/rixcian/encrypted-electron-store/branch/main/graph/badge.svg" alt="Code Coverage">
-		</a>
+		<a href="https://codecov.io/gh/rixcian/encrypted-electron-store"> 
+      <img src="https://codecov.io/gh/rixcian/encrypted-electron-store/graph/badge.svg?token=H5DRJNXCZ7"/>
+    </a>
 		<a href="https://github.com/rixcian/encrypted-electron-store/blob/main/LICENSE">
 			<img src="https://img.shields.io/npm/l/encrypted-electron-store.svg" alt="License">
 		</a>
