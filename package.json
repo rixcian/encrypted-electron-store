@@ -58,6 +58,7 @@
     ]
   },
   "devDependencies": {
+    "@changesets/cli": "^2.28.1",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^20.11.24",
     "@types/react": "^19.1.0",

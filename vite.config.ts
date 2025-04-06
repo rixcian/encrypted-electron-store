@@ -11,7 +11,7 @@ export default defineConfig({
 		target: 'es2020',
 	},
 	build: {
-		minify: false,
+		minify: true,
 		lib: {
 			entry: {
 				main: resolve(dirname(fileURLToPath(import.meta.url)), 'src/main.ts'),

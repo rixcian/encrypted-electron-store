@@ -132,7 +132,33 @@ console.log(store.get('encrypted'))
 
 _todo: Here will be specified detailed documentation; or just link to the official docs_
 
-## Comparison: `encrypted-electron-store` vs. `electron-store`
+## Contribution
+
+1. Clone this repo:
+
+```sh
+git clone https://github.com/rixcian/encrypted-electron-store
+```
+
+2. Make sure, you have node v22:
+
+```sh
+nvm use
+```
+
+3. Install dependencies:
+
+```sh
+npm i
+```
+
+4. After making changes, run tests:
+
+```sh
+npm run test
+```
+
+## Comparison with `electron-store`
 
 | Feature                            | encrypted-electron-store               | electron-store                                                                                                                 |
 | ---------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
@@ -181,13 +207,15 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
   - [x] add `has` func
   - [x] add `.size` prop
 - [x] Work with the store file atomically
-- [ ] Setup tags/badges in README
+- [x] Setup tags/badges in README
+- [x] Setup @changeset/cli
+- [ ] Setup publishing to the NPM
 - [ ] Create `examples` folder with electron projects
 - [ ] Think about singleton implementation (this could help with the point about passing store through preload)
   - [ ] `EncryptedStore` class in the `main` lib
   - [x] `vanilla` (EncryptedStore class) and `react` (EncryptedStoreProvider) - renderers libraries; are designed as singletons
 - [ ] Try to remove the `ReactJsxRuntime` from the final `react.es.js` and `react.cjs.js` builds
-- [ ] Do not forget to minify the library when debugging will be over
+- [x] Do not forget to minify the library when debugging will be over
 - [ ] Add JSON schema validation via `ajv`
 - [ ] Try to remove the `await` from the vanillajs implementation (it shouldn't be necessary to read file when initializing the store from renderer; it should be already loaded in the `EncryptedStore` object in the `main.ts`)
 - [x] Thinks about passing somehow the store through preload.ts (only possible with EncryptedStore class as singleton???)
