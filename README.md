@@ -245,7 +245,8 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
 - [ ] Create `examples` folder with Electron projects
 - [ ] Think about singleton implementation
   - [ ] Add `singleton` option to the `EncryptedStore` class in the `main` lib
-  - [x] `vanilla` (EncryptedStore class) and `react` (EncryptedStoreProvider) - renderer libraries; are designed as singletons
+  - [x] `vanilla` (EncryptedStore class)
+  - [x] `react` (EncryptedStoreProvider) - already designed as singletons
 - [ ] Try to remove the `ReactJsxRuntime` from the final `react.es.js` and `react.cjs.js` builds
 - [x] Do not forget to minify the library when debugging will be over
 - [ ] Add JSON schema validation via `ajv`

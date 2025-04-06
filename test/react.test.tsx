@@ -71,7 +71,6 @@ describe('EncryptedStoreProvider', () => {
 			</EncryptedStoreProvider>
 		)
 		expect(getByText('Test Child')).toBeTruthy()
-		vi.unstubAllGlobals()
 	})
 
 	it('should throw an error if window.encryptedStore is not available', () => {
@@ -98,7 +97,6 @@ describe('EncryptedStoreProvider', () => {
 		)
 
 		expect(mockInvoke).toHaveBeenCalledWith(EVENTS.ENCRYPTED_STORE_GET)
-		vi.unstubAllGlobals()
 	})
 
 	it('should set up event listeners for store updates', () => {
@@ -109,7 +107,6 @@ describe('EncryptedStoreProvider', () => {
 		)
 
 		expect(mockOn).toHaveBeenCalledWith(EVENTS.ENCRYPTED_STORE_UPDATED, expect.any(Function))
-		vi.unstubAllGlobals()
 	})
 
 	it('should clean up event listeners on unmount', () => {
@@ -122,7 +119,6 @@ describe('EncryptedStoreProvider', () => {
 		unmount()
 
 		expect(mockOff).toHaveBeenCalledWith(EVENTS.ENCRYPTED_STORE_UPDATED, expect.any(Function))
-		vi.unstubAllGlobals()
 	})
 })
 
@@ -140,10 +136,6 @@ describe('useEncryptedStore', () => {
 			on: mockOn,
 			off: mockOff,
 		})
-	})
-
-	afterEach(() => {
-		vi.unstubAllGlobals()
 	})
 
 	it('should throw an error if used outside of EncryptedStoreProvider', () => {

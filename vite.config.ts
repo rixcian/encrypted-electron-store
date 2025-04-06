@@ -42,15 +42,20 @@ export default defineConfig({
 	},
 	test: {
 		globals: true,
-		environment: 'node',
-		include: ['test/main.test.ts', 'test/preload.test.ts', 'test/vanilla.test.ts'],
+		environment: 'jsdom',
+		include: [
+			'test/main.test.ts',
+			'test/preload.test.ts',
+			'test/vanilla.test.ts',
+			'test/react.test.tsx',
+		],
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'json', 'html'],
 		},
 		environmentOptions: {
 			jsdom: {
-				include: ['test/vanilla.test.ts', 'test/react.test.ts'],
+				include: ['test/vanilla.test.ts', 'test/react.test.tsx'],
 			},
 			node: {
 				include: ['test/main.test.ts', 'test/preload.test.ts'],
