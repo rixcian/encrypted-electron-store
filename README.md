@@ -13,8 +13,8 @@
 		<a href="https://codecov.io/gh/rixcian/encrypted-electron-store"> 
       <img src="https://codecov.io/gh/rixcian/encrypted-electron-store/graph/badge.svg?token=H5DRJNXCZ7"/>
     </a>
-		<a href="https://github.com/rixcian/encrypted-electron-store/blob/main/LICENSE">
-			<img src="https://img.shields.io/npm/l/encrypted-electron-store.svg" alt="License">
+		<a href="https://github.com/rixcian/encrypted-electron-store/blob/master/LICENSE">
+			<img src="https://img.shields.io/npm/l/encrypted-electron-store" alt="License">
 		</a>
 		<a href="https://github.com/rixcian/encrypted-electron-store/issues">
 			<img src="https://img.shields.io/github/issues/rixcian/encrypted-electron-store.svg" alt="Issues">
@@ -227,7 +227,7 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
 - [x] Work with the store file atomically
 - [x] Setup tags/badges in README
 - [x] Setup @changeset/cli
-- [ ] Setup publishing to NPM
+- [x] Setup publishing to NPM
 - [ ] Create `examples` folder with Electron projects
 - [ ] Think about singleton implementation (this could help with the point about passing store through preload)
   - [ ] `EncryptedStore` class in the `main` lib
