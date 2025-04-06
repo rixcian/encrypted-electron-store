@@ -2,7 +2,7 @@
   "name": "encrypted-electron-store",
   "description": "Encrypted storage for Electron applications",
   "author": "rixcian <rostislav.kremecek@protonmail.com>",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "keywords": [
     "electron",
