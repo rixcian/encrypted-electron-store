@@ -1,6 +1,6 @@
 <div align="center">
 	<a href="https://rixcian.dev/projects/encrypted-electron-store">
-		<img src="docs/icon.png" width="200" height="200">
+		<img src="https://raw.githubusercontent.com/rixcian/encrypted-electron-store/refs/heads/master/docs/icon.png" width="200" height="200">
 	</a>
 	<h1>encrypted-electron-store</h1>
   <p>
