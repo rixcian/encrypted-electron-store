@@ -26,17 +26,17 @@
 	<br>
 </div>
 
-Simple encrypted data persistence for your Electron app - Save and load user settings, app state, cache, etc.
+Simple encrypted data persistence for your Electron app - Save and load user settings, app state, cache, and more.
 
 <br />
 
 It has the same API as the well-known `electron-store` library, but solves several other things:
 
-- Encrypts the data saved on disk (with built-in Electron's `safeStorage` API)
+- Encrypts the data saved on disk (using Electron's built-in `safeStorage` API)
 - Support for React hooks (auto re-renders view on store update)
-- Also works in `renderer` process (not like `electron-store` - [issue link](https://github.com/sindresorhus/electron-store/issues/268))
+- Works in the `renderer` process (unlike `electron-store` - [issue link](https://github.com/sindresorhus/electron-store/issues/268))
 - Has CommonJS exports (`electron-store` has only ESM exports)
-- Uses same API as `zustand` for getting values from store (via `useEncryptedStore` React hook)
+- Uses the same API as `zustand` for getting values from store (via `useEncryptedStore` React hook)
   - e.g. `const encrypted = useEncryptedStore(store => store.encrypted)`
 
 <br />
@@ -68,7 +68,7 @@ console.log(store.get('encrypted'))
 
 ### Renderer process
 
-If you want to use this library in `render` process as well, you firstly have to call this function in the `preload.ts/js` file.
+If you want to use this library in the `renderer` process, you first need to call this function in the `preload.ts/js` file.
 
 ```typescript
 // preload.ts/js
@@ -81,7 +81,7 @@ preloadEncryptedStore()
 
 #### React
 
-Add `EncryptedStoreProvider` component in `main.tsx/jsx` or where do you want in your React project.
+Add the `EncryptedStoreProvider` component in `main.tsx/jsx` or wherever you want in your React project.
 
 ```typescript
 // main.tsx/jsx
@@ -96,7 +96,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 ```
 
-Use `useEncryptedStore()` hook wherever you want in your React project.
+Use the `useEncryptedStore()` hook wherever you want in your React project.
 
 ```typescript
 // e.g. App.tsx/jsx
@@ -109,7 +109,7 @@ function App() {
   setStore({ encrypted: '🔒' });
 
   return (
-    /* Gets automatically re-rendered when the value gets changed */
+    /* Gets automatically re-rendered when the value changes */
     <p>{encrypted}</p>
   )
 }
@@ -120,7 +120,7 @@ function App() {
 ```typescript
 import EncryptedStore from 'encrypted-electron-store/vanilla'
 
-// You have to use `await` because the library is reading initial store from file on disk.
+// You need to use `await` because the library reads the initial store from the file on disk.
 const store = await EncryptedStore.create<{ encrypted: string }>()
 
 store.set('encrypted', '🔒')
@@ -140,7 +140,7 @@ _todo: Here will be specified detailed documentation; or just link to the offici
 git clone https://github.com/rixcian/encrypted-electron-store
 ```
 
-2. Make sure, you have node v22:
+2. Make sure you have node v22:
 
 ```sh
 nvm use
@@ -164,7 +164,7 @@ npm run test
 npx @changesets/cli
 ```
 
-6. Me as a maintainer after review, will run:
+6. As a maintainer, after review, I will run:
 
 ```sh
 npx @changesets/cli version
@@ -192,7 +192,7 @@ npx @changesets/cli publish
 
 ## Todos
 
-- [x] Finish basic react implementation
+- [x] Finish basic React implementation
 - [x] Make `const time = useEncryptedStore((store, setStore) => store.time)` architecture possible (similar to `zustand`)
 
 ```typescript
@@ -209,33 +209,33 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
 }))
 ```
 
-- [x] Add possibility to pass only partial store object to `setStore({...partialObject})` func
-- [x] Prepare tests for react part
-- [x] Finish vanilla js implementation
+- [x] Add possibility to pass only partial store object to `setStore({...partialObject})` function
+- [x] Prepare tests for React part
+- [x] Finish vanilla JS implementation
 - [x] Add possibility to define default/initial store value on store creation
   - [x] In the `main.ts` (in the main process)
   - [ ] In the `EncryptedStoreProvider` React context (`react.ts` - in the renderer process)
-    - It will be only applied when there's no store already set from the file
+    - It will only be applied when there's no store already set from the file
   - [ ] In the `EncryptedStore` class (`vanilla.ts` - in the renderer process)
-    - It will be only applied when there's no store already set from the file
+    - It will only be applied when there's no store already set from the file
 - [ ] Compatibility with `electron-store`
-  - [x] add `reset` func
-  - [x] overload `set` func (set multiple items at once)
-  - [x] update `get` func (add `defaultValue` optional parameter)
-  - [x] add `has` func
-  - [x] add `.size` prop
+  - [x] Add `reset` function
+  - [x] Overload `set` function (set multiple items at once)
+  - [x] Update `get` function (add `defaultValue` optional parameter)
+  - [x] Add `has` function
+  - [x] Add `.size` property
 - [x] Work with the store file atomically
 - [x] Setup tags/badges in README
 - [x] Setup @changeset/cli
-- [ ] Setup publishing to the NPM
-- [ ] Create `examples` folder with electron projects
+- [ ] Setup publishing to NPM
+- [ ] Create `examples` folder with Electron projects
 - [ ] Think about singleton implementation (this could help with the point about passing store through preload)
   - [ ] `EncryptedStore` class in the `main` lib
-  - [x] `vanilla` (EncryptedStore class) and `react` (EncryptedStoreProvider) - renderers libraries; are designed as singletons
+  - [x] `vanilla` (EncryptedStore class) and `react` (EncryptedStoreProvider) - renderer libraries; are designed as singletons
 - [ ] Try to remove the `ReactJsxRuntime` from the final `react.es.js` and `react.cjs.js` builds
 - [x] Do not forget to minify the library when debugging will be over
 - [ ] Add JSON schema validation via `ajv`
-- [ ] Try to remove the `await` from the vanillajs implementation (it shouldn't be necessary to read file when initializing the store from renderer; it should be already loaded in the `EncryptedStore` object in the `main.ts`)
-- [x] Thinks about passing somehow the store through preload.ts (only possible with EncryptedStore class as singleton???)
+- [ ] Try to remove the `await` from the vanilla JS implementation (it shouldn't be necessary to read file when initializing the store from renderer; it should be already loaded in the `EncryptedStore` object in the `main.ts`)
+- [x] Think about passing somehow the store through preload.ts (only possible with EncryptedStore class as singleton???)
   - On every change of the state call `contextBridge.exposeInMainWorld('encryptedStore', this.store)`, or just call this once when you're creating the singleton object (update: this can't be done, contextBridge can be called only in preload.ts)
 - [ ] Add debug mode
