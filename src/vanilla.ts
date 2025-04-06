@@ -218,6 +218,12 @@ export default class EncryptedStore<T extends Record<string, unknown>> {
 	 * Setup the listening event for the store changes from the main process.
 	 */
 	private setupEvents(): void {
+		if (!window.encryptedStore) {
+			throw new Error(
+				'window.encryptedStore is not available. Please check if you called preloadEncryptedStore() (imported from "electron-encrypted-store/preload") in your preload file.'
+			)
+		}
+
 		window.encryptedStore.on(
 			EVENTS.ENCRYPTED_STORE_UPDATED,
 			this.updateStore as (...args: unknown[]) => void

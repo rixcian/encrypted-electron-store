@@ -47,6 +47,14 @@ It has the same API as the well-known `electron-store` library, but solves sever
 npm i encrypted-electron-store
 ```
 
+```sh
+pnpm i encrypted-electron-store
+```
+
+```sh
+yarn add encrypted-electron-store
+```
+
 ## Usage
 
 ### Main process (`main.ts/js`)
@@ -64,6 +72,11 @@ console.log(store.get('encrypted'))
 store.delete('encrypted')
 console.log(store.get('encrypted'))
 //=> undefined
+
+// IMPORTANT: If you want to use the store in the renderer process
+window.webContents.on('did-finish-load', () => {
+	encryptedStore.setBrowserWindow(window)
+})
 ```
 
 ### Renderer process
@@ -187,7 +200,7 @@ npx @changesets/cli publish
 | Vanilla JS Integration             | ✅ Simple API                          | ✅ Simple API                                                                                                                  |
 | File Extensions                    | ✅ Configurable                        | ✅ Configurable                                                                                                                |
 | Works with files atomically        | ✅ Yes                                 | ✅ Yes                                                                                                                         |
-| JSON Schema validation             | 🟡 In future versions                  | ✅ Yes                                                                                                                         |
+| JSON Schema validation             | 🟡 Work in progress                    | ✅ Yes                                                                                                                         |
 | Migrations                         | ❌ Yes, if there'll be demand          | 🟡 Yes, with bugs ([more info](https://github.com/sindresorhus/electron-store/issues?q=is%3Aissue%20state%3Aopen%20migration)) |
 
 ## Todos
@@ -218,19 +231,20 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
     - It will only be applied when there's no store already set from the file
   - [ ] In the `EncryptedStore` class (`vanilla.ts` - in the renderer process)
     - It will only be applied when there's no store already set from the file
-- [ ] Compatibility with `electron-store`
+- [x] Compatibility with `electron-store`
   - [x] Add `reset` function
   - [x] Overload `set` function (set multiple items at once)
   - [x] Update `get` function (add `defaultValue` optional parameter)
   - [x] Add `has` function
   - [x] Add `.size` property
 - [x] Work with the store file atomically
+  - [ ] Try to use just the `stubborn-fs`
 - [x] Setup tags/badges in README
 - [x] Setup @changeset/cli
 - [x] Setup publishing to NPM
 - [ ] Create `examples` folder with Electron projects
-- [ ] Think about singleton implementation (this could help with the point about passing store through preload)
-  - [ ] `EncryptedStore` class in the `main` lib
+- [ ] Think about singleton implementation
+  - [ ] Add `singleton` option to the `EncryptedStore` class in the `main` lib
   - [x] `vanilla` (EncryptedStore class) and `react` (EncryptedStoreProvider) - renderer libraries; are designed as singletons
 - [ ] Try to remove the `ReactJsxRuntime` from the final `react.es.js` and `react.cjs.js` builds
 - [x] Do not forget to minify the library when debugging will be over

@@ -43,7 +43,7 @@ export default defineConfig({
 	test: {
 		globals: true,
 		environment: 'node',
-		include: ['test/main.test.ts', 'test/preload.test.ts'],
+		include: ['test/main.test.ts', 'test/preload.test.ts', 'test/vanilla.test.ts'],
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'json', 'html'],

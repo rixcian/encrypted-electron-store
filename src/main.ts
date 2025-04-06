@@ -1,4 +1,3 @@
-import { readFileSync, writeFileSync } from 'atomically'
 import type { BrowserWindow } from 'electron'
 import { app, ipcMain, safeStorage } from 'electron'
 import fs from 'node:fs'
@@ -105,7 +104,7 @@ class EncryptedStore<T extends Record<string, unknown>> {
 		// If the store file already exists, decrypt it and parse it.
 		if (fs.existsSync(this.path)) {
 			try {
-				const encryptedStore = Buffer.from(readFileSync(this.path, 'utf-8'), 'base64')
+				const encryptedStore = Buffer.from(fs.readFileSync(this.path, 'utf-8'), 'base64')
 				const decryptedStore = safeStorage.decryptString(encryptedStore)
 
 				this.store = JSON.parse(decryptedStore)
@@ -149,7 +148,7 @@ class EncryptedStore<T extends Record<string, unknown>> {
 		const encryptedStore = safeStorage
 			.encryptString(JSON.stringify(this.store, null, 0))
 			.toString('base64')
-		writeFileSync(this.path, encryptedStore)
+		fs.writeFileSync(this.path, encryptedStore)
 	}
 
 	/**
