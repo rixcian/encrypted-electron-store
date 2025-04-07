@@ -1,5 +1,11 @@
 # encrypted-electron-store
 
+## 0.4.0
+
+### Minor Changes
+
+- 9ace291: add option to add "defaultStore" value via EncryptedStoreProvider component
+
 ## 0.3.0
 
 ### Minor Changes
