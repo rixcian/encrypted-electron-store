@@ -143,6 +143,8 @@ console.log(store.get('encrypted'))
 
 ## Docs
 
+You can find examples of usage in real projects in the `examples` folder.
+
 _todo: Here will be specified detailed documentation; or just link to the official docs_
 
 ## Contribution
@@ -183,7 +185,13 @@ npx @changesets/cli
 npx @changesets/cli version
 ```
 
-7. And publish it to NPM with:
+7. Build the library:
+
+```sh
+npm run build
+```
+
+8. And publish it to NPM with:
 
 ```sh
 npx @changesets/cli publish

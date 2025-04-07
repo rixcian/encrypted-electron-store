@@ -15,6 +15,7 @@ export default [
 			'**/*.mjs',
 			'**/*.cjs',
 			'vite.config.ts',
+			'examples/**',
 		],
 	},
 	eslint.configs.recommended,
