@@ -227,7 +227,7 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
 - [x] Finish vanilla JS implementation
 - [x] Add possibility to define default/initial store value on store creation
   - [x] In the `main.ts` (in the main process)
-  - [ ] In the `EncryptedStoreProvider` React context (`react.ts` - in the renderer process)
+  - [x] In the `EncryptedStoreProvider` React context (`react.ts` - in the renderer process)
     - It will only be applied when there's no store already set from the file
   - [ ] In the `EncryptedStore` class (`vanilla.ts` - in the renderer process)
     - It will only be applied when there's no store already set from the file
@@ -242,6 +242,7 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
 - [x] Setup tags/badges in README
 - [x] Setup @changeset/cli
 - [x] Setup publishing to NPM
+- [ ] Do not publish some folders / files into NPM final package
 - [ ] Create `examples` folder with Electron projects
 - [ ] Think about singleton implementation
   - [ ] Add `singleton` option to the `EncryptedStore` class in the `main` lib

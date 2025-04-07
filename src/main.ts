@@ -124,7 +124,19 @@ class EncryptedStore<T extends Record<string, unknown>> {
 	}
 
 	private setupEvents() {
-		ipcMain.handle(EVENTS.ENCRYPTED_STORE_GET, () => new Promise((resolve) => resolve(this.store)))
+		ipcMain.handle(
+			EVENTS.ENCRYPTED_STORE_GET,
+			(_, defaultStore?: T) =>
+				new Promise((resolve) => {
+					// If the store is empty, return the default store.
+					if (Object.keys(this.store).length === 0) {
+						this.store = JSON.parse(JSON.stringify(defaultStore || {}))
+						this.saveStore()
+					}
+
+					resolve(this.store)
+				})
+		)
 
 		ipcMain.handle(
 			EVENTS.ENCRYPTED_STORE_SET,

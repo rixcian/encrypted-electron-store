@@ -13,12 +13,16 @@ const EncryptedStoreContext = createContext<
 	EncryptedStoreContextType<Record<string, unknown>> | undefined
 >(undefined)
 
+interface EncryptedStoreProviderProps<T extends Record<string, unknown>> {
+	children: ReactNode
+	defaultStore?: T
+}
+
 // Create a provider component
 export function EncryptedStoreProvider<T extends Record<string, unknown>>({
 	children,
-}: {
-	children: ReactNode
-}) {
+	defaultStore,
+}: EncryptedStoreProviderProps<T>) {
 	const [store, setStore] = useState<T>({} as T)
 
 	// Get the initial store from the main process and listen for updates
@@ -32,7 +36,7 @@ export function EncryptedStoreProvider<T extends Record<string, unknown>>({
 
 		// Get the initial store from the main process
 		window.encryptedStore
-			.invoke(EVENTS.ENCRYPTED_STORE_GET)
+			.invoke(EVENTS.ENCRYPTED_STORE_GET, defaultStore)
 			.then((initialStore: unknown) => {
 				if (initialStore && typeof initialStore === 'object') {
 					setStore(initialStore as T)

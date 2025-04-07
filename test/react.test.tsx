@@ -96,7 +96,20 @@ describe('EncryptedStoreProvider', () => {
 			</EncryptedStoreProvider>
 		)
 
-		expect(mockInvoke).toHaveBeenCalledWith(EVENTS.ENCRYPTED_STORE_GET)
+		expect(mockInvoke).toHaveBeenCalledWith(EVENTS.ENCRYPTED_STORE_GET, undefined)
+	})
+
+	it('should get initial store from the main process with default store', () => {
+		const initialStore = { test: 'value' }
+		mockInvoke.mockResolvedValueOnce(initialStore)
+
+		render(
+			<EncryptedStoreProvider defaultStore={initialStore}>
+				<div>Test Child</div>
+			</EncryptedStoreProvider>
+		)
+
+		expect(mockInvoke).toHaveBeenCalledWith(EVENTS.ENCRYPTED_STORE_GET, initialStore)
 	})
 
 	it('should set up event listeners for store updates', () => {
@@ -158,6 +171,19 @@ describe('useEncryptedStore', () => {
 		expect(result.current).toHaveProperty('setStore')
 		expect(typeof result.current.setStore).toBe('function')
 	})
+
+	// it('should get initial store from the main process with default store', () => {
+	// 	const initialStore = { test: 'value' }
+	// 	mockInvoke.mockResolvedValueOnce(initialStore)
+
+	// 	const wrapper = ({ children }: { children: React.ReactNode }) => (
+	// 		<EncryptedStoreProvider defaultStore={initialStore}>{children}</EncryptedStoreProvider>
+	// 	)
+
+	// 	const { result } = renderHook(() => useEncryptedStore(), { wrapper })
+
+	// 	expect(result.current.store).toEqual(initialStore)
+	// })
 
 	it('should allow setting store values', () => {
 		const initialStore = { test: 'value' }
