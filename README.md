@@ -60,7 +60,7 @@ yarn add encrypted-electron-store
 ### Main process (`main.ts/js`)
 
 ```typescript
-import EncryptedStore from 'encrypted-electron-store'
+import EncryptedStore from 'encrypted-electron-store/main'
 
 const store = new EncryptedStore()
 // or: const store = new EncryptedStore<{ encrypted: string }>()
