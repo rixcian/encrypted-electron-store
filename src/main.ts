@@ -41,6 +41,7 @@ interface Options<T extends Record<string, unknown>> {
  * @example
  * ```ts
  * // Main process
+ * import EncryptedStore from 'encrypted-electron-store/main'
  * const store = new EncryptedStore()
  *
  * store.set('name', 'John')
@@ -59,18 +60,18 @@ interface Options<T extends Record<string, unknown>> {
  * const store = useEncryptedStore()
  * ```
  */
-class EncryptedStore<T extends Record<string, unknown>> {
-	private store: T
+class EncryptedStore<T> {
+	private store: Record<keyof T, T[keyof T]>
 	private browserWindow: BrowserWindow | undefined
 	readonly path: string
-	readonly defaults: T
+	readonly defaults: Record<keyof T, T[keyof T]>
 
-	constructor(initialOptions: Readonly<Partial<Options<T>>> = {}) {
-		const defaultOptions: Options<T> = {
+	constructor(initialOptions: Readonly<Partial<Options<Record<string, unknown>>>> = {}) {
+		const defaultOptions: Options<Record<string, unknown>> = {
 			storeName: 'store',
 			fileExtension: 'json',
 			browserWindow: undefined,
-			defaults: {} as T,
+			defaults: {} as Record<keyof T, T[keyof T]>,
 			...initialOptions,
 		}
 
@@ -129,7 +130,7 @@ class EncryptedStore<T extends Record<string, unknown>> {
 			(_, defaultStore?: T) =>
 				new Promise((resolve) => {
 					// If the store is empty, return the default store.
-					if (Object.keys(this.store).length === 0) {
+					if (Object.keys(this.store as Record<string, unknown>).length === 0) {
 						this.store = JSON.parse(JSON.stringify(defaultStore || {}))
 						this.saveStore()
 					}
@@ -179,7 +180,7 @@ class EncryptedStore<T extends Record<string, unknown>> {
 	 */
 	public get<K extends keyof T>(key: K, defaultValue?: unknown): T[K] {
 		if (!defaultValue) {
-			return this.store[key]
+			return this.store[key] as T[K]
 		} else {
 			// If the key doesn't have value (is undefined), set the defaultValue
 			if (this.store[key] === undefined) {
@@ -187,7 +188,7 @@ class EncryptedStore<T extends Record<string, unknown>> {
 				this.saveStore()
 			}
 
-			return this.store[key]
+			return this.store[key] as T[K]
 		}
 	}
 
@@ -226,7 +227,7 @@ class EncryptedStore<T extends Record<string, unknown>> {
 		} else {
 			// Multiple values case
 			const values = keyOrValues as Partial<T>
-			Object.assign(this.store, values)
+			Object.assign(this.store as Record<string, unknown>, values)
 		}
 
 		this.saveStore()
@@ -289,7 +290,7 @@ class EncryptedStore<T extends Record<string, unknown>> {
 	 * ```
 	 */
 	public size(): number {
-		return Object.keys(this.store).length
+		return Object.keys(this.store as Record<string, unknown>).length
 	}
 
 	/**
@@ -338,7 +339,7 @@ class EncryptedStore<T extends Record<string, unknown>> {
 	 * ```
 	 */
 	public getStore(): T {
-		return this.store
+		return this.store as T
 	}
 
 	/**

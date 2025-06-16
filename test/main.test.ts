@@ -103,7 +103,7 @@ describe('encrypted-electron-store/main', () => {
 
 	it('should be able to set and get a single value', () => {
 		// Create a new store instance
-		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+		const store = new EncryptedStore<{ test: string }>({ storeName: getUniqueStoreName() })
 
 		// Set a value
 		store.set('test', '🚀')
@@ -114,7 +114,7 @@ describe('encrypted-electron-store/main', () => {
 
 	it('should be able to get a single value with a defaultValue set', () => {
 		// Create a new store instance
-		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+		const store = new EncryptedStore<{ test: string }>({ storeName: getUniqueStoreName() })
 
 		// Get a value with a defaultValue set
 		expect(store.get('test', 'defaultValue')).toBe('defaultValue')
@@ -122,7 +122,9 @@ describe('encrypted-electron-store/main', () => {
 
 	it('should be able to set multiple values', () => {
 		// Create a new store instance
-		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+		const store = new EncryptedStore<{ test: string; nested: { key: string } }>({
+			storeName: getUniqueStoreName(),
+		})
 
 		// Set multiple values
 		store.set({ test: '🚀', nested: { key: 'value' } })
@@ -134,7 +136,7 @@ describe('encrypted-electron-store/main', () => {
 
 	it('should be able to delete a value', () => {
 		// Create a new store instance
-		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+		const store = new EncryptedStore<{ test: string }>({ storeName: getUniqueStoreName() })
 
 		// Set a value
 		store.set('test', '🚀')
@@ -148,7 +150,7 @@ describe('encrypted-electron-store/main', () => {
 
 	it('should be able to check if a key exists', () => {
 		// Create a new store instance
-		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+		const store = new EncryptedStore<{ test: string }>({ storeName: getUniqueStoreName() })
 
 		// Set a value
 		store.set('test', '🚀')
@@ -165,7 +167,7 @@ describe('encrypted-electron-store/main', () => {
 
 	it('should be able to get the size of the store', () => {
 		// Create a new store instance
-		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+		const store = new EncryptedStore<{ test: string }>({ storeName: getUniqueStoreName() })
 
 		// Verify the size is 0
 		expect(store.size()).toBe(0)
@@ -185,7 +187,7 @@ describe('encrypted-electron-store/main', () => {
 
 	it('should be able to get the store as an object', () => {
 		// Create a new store instance
-		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+		const store = new EncryptedStore<{ test: string }>({ storeName: getUniqueStoreName() })
 
 		// Set a value
 		store.set('test', '🚀')
@@ -196,7 +198,7 @@ describe('encrypted-electron-store/main', () => {
 
 	it('should be able to clear the store', () => {
 		// Create a new store instance
-		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+		const store = new EncryptedStore<{ test: string }>({ storeName: getUniqueStoreName() })
 
 		// Set a value
 		store.set('test', '🚀')
@@ -217,7 +219,7 @@ describe('encrypted-electron-store/main', () => {
 		vi.mocked(safeStorage.isEncryptionAvailable).mockReturnValueOnce(false)
 
 		// Create a new store instance
-		new EncryptedStore({ storeName: getUniqueStoreName() })
+		new EncryptedStore<{ test: string }>({ storeName: getUniqueStoreName() })
 
 		// Verify warning was logged
 		expect(consoleWarnSpy).toHaveBeenCalledWith(
@@ -241,7 +243,7 @@ describe('encrypted-electron-store/main', () => {
 		const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
 		// Create a new store instance
-		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+		const store = new EncryptedStore<{ test: string }>({ storeName: getUniqueStoreName() })
 
 		// Verify error was logged
 		expect(consoleErrorSpy).toHaveBeenCalled()
@@ -256,7 +258,7 @@ describe('encrypted-electron-store/main', () => {
 
 	it('should set up IPC events', () => {
 		// Create a new store instance
-		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+		const store = new EncryptedStore<{ test: string }>({ storeName: getUniqueStoreName() })
 
 		// Verify ipcMain.handle was called for ENCRYPTED_STORE_GET
 		expect(ipcMain.handle).toHaveBeenCalledWith(expect.any(String), expect.any(Function))
@@ -267,7 +269,7 @@ describe('encrypted-electron-store/main', () => {
 
 	it('should set browser window', () => {
 		// Create a new store instance
-		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+		const store = new EncryptedStore<{ test: string }>({ storeName: getUniqueStoreName() })
 
 		// Create a mock browser window
 		const mockBrowserWindow = {
@@ -293,7 +295,7 @@ describe('encrypted-electron-store/main', () => {
 
 	it('should send updates to the browser window when setting values', () => {
 		// Create a new store instance
-		const store = new EncryptedStore({ storeName: getUniqueStoreName() })
+		const store = new EncryptedStore<{ test: string }>({ storeName: getUniqueStoreName() })
 
 		// Create a mock browser window
 		const mockBrowserWindow = {
@@ -317,7 +319,7 @@ describe('encrypted-electron-store/main', () => {
 
 	it('should initialize with defaults when provided', () => {
 		const defaults = { defaultKey: 'defaultValue', nested: { key: 'value' } }
-		const store = new EncryptedStore({
+		const store = new EncryptedStore<{ defaultKey: string; nested: { key: string } }>({
 			storeName: getUniqueStoreName(),
 			fileExtension: 'json',
 			defaults,
@@ -333,7 +335,7 @@ describe('encrypted-electron-store/main', () => {
 
 	it('should reset to defaults when reset is called', () => {
 		const defaults = { defaultKey: 'defaultValue', nested: { key: 'value' } }
-		const store = new EncryptedStore({
+		const store = new EncryptedStore<{ defaultKey: string; nested: { key: string } }>({
 			storeName: getUniqueStoreName(),
 			fileExtension: 'json',
 			defaults,
@@ -352,7 +354,7 @@ describe('encrypted-electron-store/main', () => {
 
 	it('should send updates to the browser window when reset is called', () => {
 		const defaults = { defaultKey: 'defaultValue' }
-		const store = new EncryptedStore({
+		const store = new EncryptedStore<{ defaultKey: string }>({
 			storeName: getUniqueStoreName(),
 			defaults,
 		})
@@ -385,7 +387,7 @@ describe('encrypted-electron-store/main', () => {
 		const storeName = getUniqueStoreName()
 
 		// Create a new store instance
-		const store = new EncryptedStore({ storeName, fileExtension: 'json' })
+		const store = new EncryptedStore<{ test: string }>({ storeName, fileExtension: 'json' })
 
 		// Set a value
 		store.set('test', '🚀')
