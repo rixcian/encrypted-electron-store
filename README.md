@@ -62,8 +62,9 @@ yarn add encrypted-electron-store
 ```typescript
 import EncryptedStore from 'encrypted-electron-store/main'
 
-const store = new EncryptedStore()
+const store = new EncryptedStore<any>()
 // or: const store = new EncryptedStore<{ encrypted: string }>()
+// or: const store = new EncryptedStore<IStore>()
 
 store.set('encrypted', '🔒')
 console.log(store.get('encrypted'))
@@ -250,8 +251,10 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
 - [x] Setup tags/badges in README
 - [x] Setup @changeset/cli
 - [x] Setup publishing to NPM
-- [ ] Do not publish some folders / files into NPM final package
+- [x] Do not publish some folders / files into NPM final package
 - [ ] Create `examples` folder with Electron projects
+  - [x] React project example
+  - [ ] VanillaJS project example
 - [ ] Think about singleton implementation
   - [ ] Add `singleton` option to the `EncryptedStore` class in the `main` lib
   - [x] `vanilla` (EncryptedStore class)
@@ -263,3 +266,19 @@ const { time, setStore } = useEncryptedStore<Store>((store, setStore) => ({
 - [x] Think about passing somehow the store through preload.ts (only possible with EncryptedStore class as singleton???)
   - On every change of the state call `contextBridge.exposeInMainWorld('encryptedStore', this.store)`, or just call this once when you're creating the singleton object (update: this can't be done, contextBridge can be called only in preload.ts)
 - [ ] Add debug mode
+
+---
+
+- [ ] Make `EncryptedStore` class in `main.ts` as singleton
+
+```typescript
+const instances: Record<string, instanceof EncryptedStore> = {
+  'store': <instance_of_encrypted_store>,
+  'custom_store_name': <instance_of_encrypted_store>,
+}
+
+// In the constructor return the instance based on the "store name"
+// By default it will use the name "store"
+```
+
+- [ ] `EncryptedStore` class in `main.ts` should accept generic interface as a `T`, not Record, like it's right now
