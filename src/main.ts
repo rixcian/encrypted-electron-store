@@ -5,6 +5,9 @@ import path from 'node:path'
 
 import { EVENTS } from './types/events'
 
+const DEFAULT_STORE_NAME = 'store'
+const DEFAULT_FILE_EXTENSION = 'json'
+
 interface Options<T extends Record<string, unknown>> {
 	/**
 	 * The name of the file to store the data..
@@ -42,7 +45,7 @@ interface Options<T extends Record<string, unknown>> {
  * ```ts
  * // Main process
  * import EncryptedStore from 'encrypted-electron-store/main'
- * const store = new EncryptedStore()
+ * const store = EncryptedStore.create()
  *
  * store.set('name', 'John')
  * console.log(store.get('name'))
@@ -61,15 +64,16 @@ interface Options<T extends Record<string, unknown>> {
  * ```
  */
 class EncryptedStore<T> {
+	private static stores: Record<string, EncryptedStore<any>> = {}
 	private store: Record<keyof T, T[keyof T]>
 	private browserWindow: BrowserWindow | undefined
 	readonly path: string
 	readonly defaults: Record<keyof T, T[keyof T]>
 
-	constructor(initialOptions: Readonly<Partial<Options<Record<string, unknown>>>> = {}) {
+	private constructor(initialOptions: Readonly<Partial<Options<Record<string, unknown>>>> = {}) {
 		const defaultOptions: Options<Record<string, unknown>> = {
-			storeName: 'store',
-			fileExtension: 'json',
+			storeName: DEFAULT_STORE_NAME,
+			fileExtension: DEFAULT_FILE_EXTENSION,
 			browserWindow: undefined,
 			defaults: {} as Record<keyof T, T[keyof T]>,
 			...initialOptions,
@@ -89,6 +93,22 @@ class EncryptedStore<T> {
 
 		// Setup the events.
 		this.setupEvents()
+	}
+
+	/**
+	 * Create a new store instance.
+	 *
+	 * @param initialOptions - The options for the store.
+	 * @returns The store instance.
+	 */
+	public static create<T>(
+		initialOptions: Readonly<Partial<Options<Record<string, unknown>>>> = {}
+	): EncryptedStore<T> {
+		const storeName = initialOptions.storeName || DEFAULT_STORE_NAME
+		if (!EncryptedStore.stores[storeName]) {
+			EncryptedStore.stores[storeName] = new EncryptedStore(initialOptions)
+		}
+		return EncryptedStore.stores[storeName]
 	}
 
 	/**
