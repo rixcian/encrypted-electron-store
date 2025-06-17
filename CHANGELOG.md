@@ -1,5 +1,11 @@
 # encrypted-electron-store
 
+## 0.5.0
+
+### Minor Changes
+
+- 82bfdff: EncryptedStore class accepts interface as generic + it is a singleton
+
 ## 0.4.0
 
 ### Minor Changes
