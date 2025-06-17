@@ -28,9 +28,11 @@
 
 Simple encrypted data persistence for your Electron app - Save and load user settings, app state, cache, and more.
 
+You can use it as a **single** store for both the `main` and `renderer` processes.
+
 <br />
 
-It has the same API as the well-known `electron-store` library, but solves several other things:
+It has the same features as the well-known `electron-store` library, but solves several other things:
 
 - Encrypts the data saved on disk (using Electron's built-in `safeStorage` API)
 - Support for React hooks (auto re-renders view on store update)
